@@ -37,3 +37,4 @@ def register():
         flash(error)
 
     return render_template('auth/register.html')
+    
