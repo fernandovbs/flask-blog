@@ -34,7 +34,7 @@ def index():
         'SELECT p.id, title, body, created, author_id, username'
         ' FROM post p JOIN user u ON p.author_id = u.id'
         ' ORDER BY created DESC'
-    ).fetch()
+    ).fetchall()
     return render_template('blog/index.html', posts=posts)
 
 
@@ -59,11 +59,11 @@ def create():
             db.commit()
             return redirect(url_for('blog.index'))
     else:
-        render_template('blog/create.html')
+        return render_template('blog/create.html')
 
 @bp.route('/<int:id>/update', methods=('GET', 'POST'))
 @login_required
-def update():
+def update(id):
     post = get_post(id)
 
     if request.method == 'POST':
@@ -89,16 +89,16 @@ def update():
 
     return render_template('blog/update.html', post=post)
 
-@bp.route('<int:id>/delete', method=('POST',))
+@bp.route('/<int:id>/delete', methods=('POST',))
 @login_required
-def delete():
+def delete(id):
     post = get_post(id)
     db = get_db()
     if db.execute(
-        'SELECT id FROM post where id = ?', (id)
+        'SELECT id FROM post where id = ?', (id,)
     ).fetchone():
         db.execute(
-            'DELETE FROM post WHERE id = ?', (id)
+            'DELETE FROM post WHERE id = ?', (id,)
         )
     db.commit()
 
