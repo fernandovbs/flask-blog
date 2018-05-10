@@ -88,3 +88,18 @@ def update():
             return redirect(url_for('blog.index'))
 
     return render_template('blog/update.html', post=post)
+
+@bp.route('<int:id>/delete', method=('POST',))
+@login_required
+def delete():
+    post = get_post(id)
+    db = get_db()
+    if db.execute(
+        'SELECT id FROM post where id = ?', (id)
+    ).fetchone():
+        db.execute(
+            'DELETE FROM post WHERE id = ?', (id)
+        )
+    db.commit()
+
+    return redirect(url_for('blog.index'))
