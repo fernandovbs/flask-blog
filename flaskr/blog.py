@@ -47,7 +47,7 @@ def create():
         error = None
 
         if not title:
-            error = 'Title is required'
+            error = 'Title is required.'
         
         if error is not None:
             flash(error)
@@ -58,8 +58,8 @@ def create():
             )
             db.commit()
             return redirect(url_for('blog.index'))
-    else:
-        return render_template('blog/create.html')
+
+    return render_template('blog/create.html')
 
 @bp.route('/<int:id>/update', methods=('GET', 'POST'))
 @login_required
@@ -72,8 +72,8 @@ def update(id):
         body = request.form['body']
         error = None
 
-        if title is None:
-            error = 'Title is required'
+        if not title:
+            error = 'Title is required.'
         
         if error is not None:
             flash(error)
